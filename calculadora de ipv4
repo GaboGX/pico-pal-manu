@@ -1,0 +1,88 @@
+import ipaddress
+
+def calcular_datos_red(ip_red):
+ import ipaddress
+
+def calcular_direccion_de_red(ip, mascara):
+    red = ipaddress.IPv4Network(f"{ip}/{mascara}", strict=False)
+    return red.network_address
+
+def calcular_submascara(ip, mascara):
+    red = ipaddress.IPv4Network(f"{ip}/{mascara}", strict=False)
+    return red.netmask
+
+def calcular_wildcard(ip, mascara):
+    red = ipaddress.IPv4Network(f"{ip}/{mascara}", strict=False)
+    return red.hostmask
+
+def calcular_broadcast(ip, mascara):
+    red = ipaddress.IPv4Network(f"{ip}/{mascara}", strict=False)
+    return red.broadcast_address
+
+def calcular_primer_rango_host(ip, mascara):
+    red = ipaddress.IPv4Network(f"{ip}/{mascara}", strict=False)
+    return red.network_address + 1
+
+def calcular_ultimo_rango_host(ip, mascara):
+    red = ipaddress.IPv4Network(f"{ip}/{mascara}", strict=False)
+    return red.broadcast_address - 1
+
+def calcular_host(ip, mascara):
+    red = ipaddress.IPv4Network(f"{ip}/{mascara}", strict=False)
+    return red.num_addresses - 2
+
+def calcular_rango_de_ip(ip, mascara):
+    red = ipaddress.IPv4Network(f"{ip}/{mascara}", strict=False)
+    return red.broadcast_address > 0
+
+def menu():
+    print("Seleccione una opción:")
+    print("1. Dirección de red")
+    print("2. Máscara de Subred")
+    print("3. Wildcard")
+    print("4. Dirección de Broadcast")
+    print("5. Primera IP")
+    print("6. Última IP")
+    print("7. Número de Hosts")
+    print("8.Rango de Host")
+    print("9. Salir")
+
+while True:
+    menu()
+    opcion = input("Introduce tu opción (1-9): ").strip()
+
+    if opcion in ['1', '2', '3', '4', '5', '6', '7','8']:
+        ip = input("Introduce la dirección IP: ").strip()
+        mascara = input("Introduce la máscara de red: ").strip()
+
+        
+        if '.' in mascara:
+            mascara = ipaddress.IPv4Network(f"0.0.0.0/{mascara}").prefixlen
+
+        try:
+            if opcion == '1':
+                print(f"Dirección de red: {calcular_direccion_de_red(ip, mascara)}\n")
+            elif opcion == '2':
+                print(f"Máscara de Subred: {calcular_submascara(ip, mascara)}\n")
+            elif opcion == '3':
+                print(f"Wildcard: {calcular_wildcard(ip, mascara)}\n")
+            elif opcion == '4':
+                print(f"Dirección de Broadcast: {calcular_broadcast(ip, mascara)}\n")
+            elif opcion == '5':
+                print(f"Primera IP: {calcular_primer_rango_host(ip, mascara)}\n")
+            elif opcion == '6':
+                print(f"Última IP: {calcular_ultimo_rango_host(ip, mascara)}\n")
+            elif opcion == '7':
+                print(f"Número de Hosts: {calcular_host(ip, mascara)}\n")
+            elif opcion == '8' :
+                print(f"rando de IP: {calcular_rango_de_ip(ip, mascara)}\n")
+        except ipaddress.AddressValueError as e:
+            print(f"Error en la dirección IP: {e}. Por favor, introduce una dirección IP válida.\n")
+        except Exception as e:
+            print(f"Se produjo un error: {e}. Inténtalo de nuevo.\n")
+    
+    elif opcion == '9':
+        print("Saliendo del programa...")
+        break
+    else:
+        print("Opción no válida. Intenta de nuevo.\n")
